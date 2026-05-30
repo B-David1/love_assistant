@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "339015453015",
+    "project_id": "loveassistant-68d74",
+    "storage_bucket": "loveassistant-68d74.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339015453015:android:dd8a7e86f6809ccb6dd612",
+        "android_client_info": {
+          "package_name": "com.loveassistant.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNlvRlaL2IRL-bt9415eCw7h9SkZL0h7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
