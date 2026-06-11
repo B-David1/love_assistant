@@ -164,7 +164,7 @@ class _SpiderChartPainter extends CustomPainter {
         strokeWidth: 2.5,
         dashLength: 4,
         gapLength: 4,
-        fillColor: Colors.deepPurple.shade100.withOpacity(0.18),
+        fillColor: Colors.deepPurple.shade100.withValues(alpha: 0.18),
       );
     }
 
@@ -183,7 +183,7 @@ class _SpiderChartPainter extends CustomPainter {
     canvas.drawPath(
       dataPath,
       Paint()
-        ..color = Colors.pink.shade100.withOpacity(0.3)
+        ..color = Colors.pink.shade100.withValues(alpha: 0.3)
         ..style = PaintingStyle.fill,
     );
     canvas.drawPath(

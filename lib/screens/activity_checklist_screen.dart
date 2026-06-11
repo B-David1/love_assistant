@@ -215,7 +215,7 @@ class _TraitSection extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +224,7 @@ class _TraitSection extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.08),
+              color: color.withValues(alpha: 0.08),
               borderRadius: const BorderRadius.vertical(top: Radius.circular(11)),
             ),
             child: Row(
@@ -266,7 +266,7 @@ class _TraitSection extends StatelessWidget {
                       Text(
                         '▲ needs increase',
                         style: TextStyle(
-                            fontSize: 10, color: color.withOpacity(0.7)),
+                            fontSize: 10, color: color.withValues(alpha: 0.7)),
                       ),
                     ],
                   ),

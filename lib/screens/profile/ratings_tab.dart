@@ -254,7 +254,7 @@ class _RatingsTabState extends State<RatingsTab> {
             padding:
                 const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
             decoration: BoxDecoration(
-              color: header.color.withOpacity(0.12),
+              color: header.color.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text('${header.count}',
@@ -265,7 +265,7 @@ class _RatingsTabState extends State<RatingsTab> {
           ),
           const SizedBox(width: 8),
           Expanded(
-              child: Divider(color: header.color.withOpacity(0.25))),
+              child: Divider(color: header.color.withValues(alpha: 0.25))),
         ],
       ),
     );
@@ -358,7 +358,7 @@ class _SearchOverlayState extends State<_SearchOverlay> {
           Positioned.fill(
             child: GestureDetector(
               onTap: widget.onClose,
-              child: Container(color: Colors.black.withOpacity(0.3)),
+              child: Container(color: Colors.black.withValues(alpha: 0.3)),
             ),
           ),
 
@@ -417,7 +417,7 @@ class _SearchOverlayState extends State<_SearchOverlay> {
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black
-                                          .withOpacity(0.12),
+                                          .withValues(alpha: 0.12),
                                       blurRadius: 12,
                                       offset: const Offset(0, 4),
                                     ),
@@ -482,8 +482,8 @@ class _SearchOverlayState extends State<_SearchOverlay> {
                                                         vertical: 1),
                                                     decoration: BoxDecoration(
                                                         color: item.color
-                                                            .withOpacity(
-                                                                0.12),
+                                                            .withValues(
+                                                                alpha: 0.12),
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(

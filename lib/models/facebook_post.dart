@@ -5,7 +5,7 @@ class FacebookPost {
   final String? story;
   final String? permalinkUrl;
 
-  FacebookPost({
+  const FacebookPost({
     required this.id,
     this.message,
     required this.createdTime,
@@ -13,27 +13,21 @@ class FacebookPost {
     this.permalinkUrl,
   });
 
-  factory FacebookPost.fromJson(Map<String, dynamic> json) {
-    return FacebookPost(
-      id: json['id'] as String,
-      message: json['message'] as String?,
-      createdTime: DateTime.parse(json['created_time'] as String),
-      story: json['story'] as String?,
-      permalinkUrl: json['permalink_url'] as String?,
-    );
-  }
+  factory FacebookPost.fromJson(Map<String, dynamic> json) => FacebookPost(
+        id:           json['id'] as String,
+        message:      json['message'] as String?,
+        createdTime:  DateTime.parse(json['created_time'] as String),
+        story:        json['story'] as String?,
+        permalinkUrl: json['permalink_url'] as String?,
+      );
 
-  String get actualPostId {
-    if (id.contains('_')) {
-      return id.split('_')[1];
-    }
-    return id;
-  }
+  String get actualPostId =>
+      id.contains('_') ? id.split('_').last : id;
 
   String get displayTitle {
     if (message != null && message!.isNotEmpty) {
-      return message!.length > 100 
-          ? '${message!.substring(0, 97)}...' 
+      return message!.length > 100
+          ? '${message!.substring(0, 97)}…'
           : message!;
     }
     return story ?? 'No content';

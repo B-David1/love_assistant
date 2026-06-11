@@ -1,16 +1,17 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TokenStorageService {
-  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
-  
-  static const String _accessTokenKey = 'facebook_access_token';
-  static const String _userIdKey = 'facebook_user_id';
-  static const String _userNameKey = 'facebook_user_name';
-  static const String _userEmailKey = 'facebook_user_email';
-  static const String _tokenExpiryKey = 'facebook_token_expiry';
-  static const String _permissionsKey = 'facebook_permissions';
+  TokenStorageService();
 
-  // Save Facebook OAuth tokens and user data
+  static const _storage = FlutterSecureStorage();
+
+  static const _kAccessToken  = 'facebook_access_token';
+  static const _kUserId       = 'facebook_user_id';
+  static const _kUserName     = 'facebook_user_name';
+  static const _kUserEmail    = 'facebook_user_email';
+  static const _kTokenExpiry  = 'facebook_token_expiry';
+  static const _kPermissions  = 'facebook_permissions';
+
   Future<void> saveFacebookAuthData({
     required String accessToken,
     required String userId,
@@ -19,75 +20,56 @@ class TokenStorageService {
     required DateTime expiryDate,
     required List<String> permissions,
   }) async {
-    await _secureStorage.write(key: _accessTokenKey, value: accessToken);
-    await _secureStorage.write(key: _userIdKey, value: userId);
-    await _secureStorage.write(key: _tokenExpiryKey, value: expiryDate.toIso8601String());
-    await _secureStorage.write(key: _permissionsKey, value: permissions.join(','));
-    
-    if (userName != null) {
-      await _secureStorage.write(key: _userNameKey, value: userName);
-    }
-    if (userEmail != null) {
-      await _secureStorage.write(key: _userEmailKey, value: userEmail);
-    }
+    await Future.wait([
+      _storage.write(key: _kAccessToken, value: accessToken),
+      _storage.write(key: _kUserId,      value: userId),
+      _storage.write(key: _kTokenExpiry, value: expiryDate.toIso8601String()),
+      _storage.write(key: _kPermissions, value: permissions.join(',')),
+      if (userName  != null) _storage.write(key: _kUserName,  value: userName),
+      if (userEmail != null) _storage.write(key: _kUserEmail, value: userEmail),
+    ]);
   }
 
-  // Get stored access token
   Future<String?> getAccessToken() async {
-    final token = await _secureStorage.read(key: _accessTokenKey);
-    if (token != null) {
-      // Check if token is expired
-      final expiryStr = await _secureStorage.read(key: _tokenExpiryKey);
-      if (expiryStr != null) {
-        final expiry = DateTime.parse(expiryStr);
-        if (expiry.isBefore(DateTime.now())) {
-          // Token expired, clear it
-          await clearAllTokens();
-          return null;
-        }
+    final token = await _storage.read(key: _kAccessToken);
+    if (token == null) return null;
+
+    final expiryStr = await _storage.read(key: _kTokenExpiry);
+    if (expiryStr != null) {
+      final expiry = DateTime.tryParse(expiryStr);
+      if (expiry != null && expiry.isBefore(DateTime.now())) {
+        await clearAllTokens();
+        return null;
       }
     }
     return token;
   }
 
-  // Get user data
-  Future<Map<String, String?>> getUserData() async {
-    return {
-      'userId': await _secureStorage.read(key: _userIdKey),
-      'userName': await _secureStorage.read(key: _userNameKey),
-      'userEmail': await _secureStorage.read(key: _userEmailKey),
-      'permissions': await _secureStorage.read(key: _permissionsKey),
-    };
-  }
+  Future<Map<String, String?>> getUserData() async => {
+        'userId':    await _storage.read(key: _kUserId),
+        'userName':  await _storage.read(key: _kUserName),
+        'userEmail': await _storage.read(key: _kUserEmail),
+        'permissions': await _storage.read(key: _kPermissions),
+      };
 
-  // Check if user is logged in with valid token
   Future<bool> hasValidToken() async {
     final token = await getAccessToken();
     return token != null && token.isNotEmpty;
   }
 
-  // Get token expiry date
-  Future<DateTime?> getTokenExpiry() async {
-    final expiryStr = await _secureStorage.read(key: _tokenExpiryKey);
-    if (expiryStr != null) {
-      return DateTime.parse(expiryStr);
-    }
-    return null;
+  Future<void> updateAccessToken(String token, DateTime expiry) async {
+    await Future.wait([
+      _storage.write(key: _kAccessToken, value: token),
+      _storage.write(key: _kTokenExpiry, value: expiry.toIso8601String()),
+    ]);
   }
 
-  // Clear all stored auth data
-  Future<void> clearAllTokens() async {
-    await _secureStorage.delete(key: _accessTokenKey);
-    await _secureStorage.delete(key: _userIdKey);
-    await _secureStorage.delete(key: _userNameKey);
-    await _secureStorage.delete(key: _userEmailKey);
-    await _secureStorage.delete(key: _tokenExpiryKey);
-    await _secureStorage.delete(key: _permissionsKey);
-  }
-
-  // Update token (for token refresh)
-  Future<void> updateAccessToken(String newToken, DateTime newExpiry) async {
-    await _secureStorage.write(key: _accessTokenKey, value: newToken);
-    await _secureStorage.write(key: _tokenExpiryKey, value: newExpiry.toIso8601String());
-  }
+  Future<void> clearAllTokens() => Future.wait([
+        _storage.delete(key: _kAccessToken),
+        _storage.delete(key: _kUserId),
+        _storage.delete(key: _kUserName),
+        _storage.delete(key: _kUserEmail),
+        _storage.delete(key: _kTokenExpiry),
+        _storage.delete(key: _kPermissions),
+      ]);
 }

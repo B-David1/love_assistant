@@ -352,7 +352,7 @@ class _LikertButton extends StatelessWidget {
             width: isSelected ? 2.5 : 1.5,
           ),
           boxShadow: isSelected
-              ? [BoxShadow(color: color.withOpacity(0.25), blurRadius: 8, spreadRadius: 1)]
+              ? [BoxShadow(color: color.withValues(alpha: 0.25), blurRadius: 8, spreadRadius: 1)]
               : [],
         ),
         child: Center(

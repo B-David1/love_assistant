@@ -334,7 +334,7 @@ class _BlacklistScreenState extends State<BlacklistScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 72, color: iconColor.withOpacity(0.4)),
+          Icon(icon, size: 72, color: iconColor.withValues(alpha: 0.4)),
           const SizedBox(height: 16),
           Text(title,
               style: const TextStyle(
@@ -381,7 +381,7 @@ class _BlacklistTile extends StatelessWidget {
             const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         leading: CircleAvatar(
           backgroundColor:
-              score.scoreColor.withOpacity(0.15),
+              score.scoreColor.withValues(alpha: 0.15),
           child: Text(
             score.name.isNotEmpty
                 ? score.name[0].toUpperCase()
@@ -406,7 +406,7 @@ class _BlacklistTile extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                color: score.scoreColor.withOpacity(0.1),
+                color: score.scoreColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(

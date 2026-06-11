@@ -22,7 +22,9 @@ class AndroidWebviewPostLoader {
 
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setUserAgent(_desktopUserAgent);
+      ..setUserAgent(_desktopUserAgent)
+      ..clearCache()
+      ..clearLocalStorage();
 
     controller.setNavigationDelegate(NavigationDelegate(
       onPageFinished: (url) async {
@@ -71,7 +73,9 @@ class AndroidWebviewPostLoader {
 
     final controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setUserAgent(_desktopUserAgent);
+      ..setUserAgent(_desktopUserAgent)
+      ..clearCache()
+      ..clearLocalStorage();
 
     controller.setNavigationDelegate(
       NavigationDelegate(

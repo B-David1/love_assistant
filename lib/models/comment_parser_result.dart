@@ -11,11 +11,10 @@ class CommentParserResult {
     List<String>? comments,
     List<PersonScore>? personScores,
     DateTime? timestamp,
-  })  : comments = comments ?? [],
+  })  : comments     = comments     ?? [],
         personScores = personScores ?? [],
-        timestamp = timestamp ?? DateTime.now();
+        timestamp    = timestamp    ?? DateTime.now();
 
-  int get commentCount => comments.length;
   bool get hasComments => comments.isNotEmpty;
-  bool get hasScores => personScores.isNotEmpty;
+  bool get hasScores   => personScores.isNotEmpty;
 }

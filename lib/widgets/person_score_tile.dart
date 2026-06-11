@@ -29,7 +29,7 @@ class _PersonScoreTileState extends State<PersonScoreTile> {
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: widget.score.scoreColor.withOpacity(0.2),
+          backgroundColor: widget.score.scoreColor.withValues(alpha: 0.2),
           child: Text(
             widget.rank.toString(),
             style: TextStyle(
@@ -48,7 +48,7 @@ class _PersonScoreTileState extends State<PersonScoreTile> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: widget.score.scoreColor.withOpacity(0.1),
+                color: widget.score.scoreColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(

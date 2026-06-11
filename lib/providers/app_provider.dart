@@ -1,27 +1,45 @@
-import 'package:flutter/material.dart';
-import '../models/person_score.dart';
+import 'package:flutter/foundation.dart';
+
 import '../models/comment_parser_result.dart';
+import '../models/person_score.dart';
 
 class AppProvider extends ChangeNotifier {
   List<CommentParserResult> _parseResults = [];
-  List<PersonScore> _personScores = [];
-  Map<String, dynamic>? _userData;
-  bool _isLoading = false;
-  String _statusMessage = 'Ready';
-  bool _isError = false;
-  int _currentStep = 0;
+  List<PersonScore>         _personScores = [];
+  Map<String, dynamic>?     _userData;
 
-  List<CommentParserResult> get parseResults => _parseResults;
-  List<PersonScore> get personScores => _personScores;
-  Map<String, dynamic>? get userData => _userData;
-  bool get isLoading => _isLoading;
-  String get statusMessage => _statusMessage;
-  bool get isError => _isError;
-  int get currentStep => _currentStep;
-  
-  String get userName => _userData?['name'] ?? 'User';
-  String get userEmail => _userData?['email'] ?? '';
-  String get userPicture => _userData?['picture']?['data']?['url'] ?? '';
+  bool   _isLoading     = false;
+  String _statusMessage = 'Ready';
+  bool   _isError       = false;
+
+  List<CommentParserResult> get parseResults  => _parseResults;
+  List<PersonScore>         get personScores  => _personScores;
+  Map<String, dynamic>?     get userData      => _userData;
+  bool                      get isLoading     => _isLoading;
+  String                    get statusMessage => _statusMessage;
+  bool                      get isError       => _isError;
+
+  String get userName   => _userData?['name']                       as String? ?? 'User';
+  String get userEmail  => _userData?['email']                      as String? ?? '';
+  String get userPicture =>
+      _userData?['picture']?['data']?['url'] as String? ?? '';
+
+  int get totalComments =>
+      _parseResults.fold(0, (sum, r) => sum + r.comments.length);
+
+  double get averageScore {
+    if (_personScores.isEmpty) return 50.0;
+    return _personScores.fold(0, (sum, s) => sum + s.score) /
+        _personScores.length;
+  }
+
+  PersonScore? get highestScore => _personScores.isEmpty
+      ? null
+      : _personScores.reduce((a, b) => a.score > b.score ? a : b);
+
+  PersonScore? get lowestScore => _personScores.isEmpty
+      ? null
+      : _personScores.reduce((a, b) => a.score < b.score ? a : b);
 
   void setLoading(bool loading) {
     _isLoading = loading;
@@ -30,27 +48,12 @@ class AppProvider extends ChangeNotifier {
 
   void setStatus(String message, {bool isError = false}) {
     _statusMessage = message;
-    _isError = isError;
+    _isError       = isError;
     notifyListeners();
   }
 
-  void setCurrentStep(int step) {
-    _currentStep = step;
-    notifyListeners();
-  }
-
-  void setUserData(Map<String, dynamic> userData) {
-    _userData = userData;
-    notifyListeners();
-  }
-
-  void setParseResults(List<CommentParserResult> results) {
-    _parseResults = results;
-    notifyListeners();
-  }
-
-  void addParseResult(CommentParserResult result) {
-    _parseResults.add(result);
+  void setUserData(Map<String, dynamic> data) {
+    _userData = data;
     notifyListeners();
   }
 
@@ -59,19 +62,17 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addPersonScore(PersonScore score) {
-    _personScores.add(score);
+  void setParseResults(List<CommentParserResult> results) {
+    _parseResults = results;
     notifyListeners();
   }
 
   void clearAll() {
-    _parseResults.clear();
-    _personScores.clear();
-    _isLoading = false;
+    _parseResults  = [];
+    _personScores  = [];
+    _isLoading     = false;
     _statusMessage = 'Ready';
-    _isError = false;
-    _currentStep = 0;
-    // Keep user data unless explicitly logging out
+    _isError       = false;
     notifyListeners();
   }
 
@@ -79,29 +80,5 @@ class AppProvider extends ChangeNotifier {
     clearAll();
     _userData = null;
     notifyListeners();
-  }
-
-  int get totalComments {
-    return _parseResults.fold(0, (sum, result) => sum + result.comments.length);
-  }
-
-  int get totalAnalyzedPeople {
-    return _personScores.length;
-  }
-
-  double get averageScore {
-    if (_personScores.isEmpty) return 50.0;
-    final sum = _personScores.fold(0, (total, score) => total + score.score);
-    return sum / _personScores.length;
-  }
-
-  PersonScore? getHighestScore() {
-    if (_personScores.isEmpty) return null;
-    return _personScores.reduce((a, b) => a.score > b.score ? a : b);
-  }
-
-  PersonScore? getLowestScore() {
-    if (_personScores.isEmpty) return null;
-    return _personScores.reduce((a, b) => a.score < b.score ? a : b);
   }
 }
